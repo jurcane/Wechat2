@@ -1,0 +1,26 @@
+<include file="Public/header"/>
+<style type="text/css">
+    .stateLabel{height:35px;line-height:35px;float:left;display:inline-block;margin:0;cursor:pointer;}
+    #reply_content_div,#reply_keyword_div{display:none;}
+</style>
+<div class="comm-top">
+    <div class="title-left">
+        <h4 style="margin-bottom:0">选择微信
+        </h4>
+    </div>
+    <div class="title-right">
+        <{$Think.session.user.username}>, <a href="<{:U('common/login_out')}>"><i class="glyphicon glyphicon-send"></i></a>
+    </div>
+</div>
+<div class="">
+<ul class="comm-list">
+    <foreach name="list" item="vo">
+        <li>
+            <a href="<{:U('choose_w_do',array('id'=> $vo['id']))}>" target='_self'>
+                <i class="glyphicon glyphicon-flag"></i> <{$vo.name}>
+            </a>
+        </li>
+    </foreach>
+</ul>
+</div>
+<include file="Public/footer"/>

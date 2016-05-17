@@ -1,0 +1,48 @@
+<include file="Public/header"/>
+<style type="text/css">
+    .stateLabel{height:35px;line-height:35px;float:left;display:inline-block;margin:0;cursor:pointer;}
+    #reply_content_div,#reply_keyword_div{display:none;}
+</style>
+<div class="comm-top">
+    <div class="title-left">
+        <h4 style="margin-bottom:0">微信公众平台
+            <span style="font-size:12px;color:#aaa;font-weight:normal;">（DEV）</span>
+        </h4>
+    </div>
+    <div class="title-right">
+    <{$Think.session.user.username}>, <a href="<{:U('common/login_out')}>"><i class="glyphicon glyphicon-send"></i></a>
+    </div>
+</div>
+
+<div class="">
+<ul class="comm-list">
+    <li><a href="<{:U('save_auto_reply',array('type'=>'1'))}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 首次关注回复
+    </a></li>
+    <li><a href="<{:U('save_auto_reply',array('type'=>'2'))}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 无匹配回复
+    </a></li>
+    <li><a href="<{:U('index_menu')}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 自定义菜单
+    </a></li>
+    <li><a href="<{:U('index_keyword',array('type'=>'1'))}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 关键词回复
+    </a></li>
+    <li><a href="<{:U('url_token')}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 微信接口配置
+    </a></li>
+    <li><a href="<{:U('member')}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 粉丝列表
+    </a></li>
+    <li><a href="<{:U('message')}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 消息列表
+    </a></li>
+    <li><a href="<{:U('article_list')}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 文章列表
+    </a></li>
+    <li><a href="<{:U('article_sort_list')}>" target='_blank'>
+        <i class="glyphicon glyphicon-play"></i> 文章分类列表
+    </a></li>
+</ul>
+</div>
+<include file="Public/footer"/>

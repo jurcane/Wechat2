@@ -1,0 +1,30 @@
+<include file="Public/header" />
+<style type="text/css">
+    .stateLabel{height:35px;line-height:35px;float:left;display:inline-block;margin:0;cursor:pointer;}
+    .sort .sort_title{width:12%;}
+    .sort_set .sort_text{width:500px;}
+</style>
+<div class="comm-top">
+	<h4 style="margin-bottom:0">接口配置信息
+        <span style="font-size:12px;color:#aaa;font-weight:normal;">（复制接口配置信息。登陆公众帐号，进入开发 -&gt; 基本配置 -&gt; 填写相应的URL和Token进行验证。）</span>
+    </h4>
+	<div class="add_page_top"></div>
+</div>
+<div style="height:20px;"></div>
+<div class="sort_box">
+    <form role="form" method="post" id="autoreplyform">
+        <div id="reply_keyword_div" class="sort">
+			<div class="sort_title"><h4>接口URL：</h4></div>
+			<div class="sort_set">
+                <input name="reply_keyword" type="text" class="sort_text" readonly onclick="this.select()" value="<{$url}>" />
+			</div>
+        </div>
+        <div id="reply_keyword_div" class="sort">
+			<div class="sort_title"><h4>接口Token：</h4></div>
+			<div class="sort_set">
+                <input name="reply_keyword" type="text" class="sort_text" readonly onclick="this.select()" value="<{$token}>" />
+			</div>
+        </div>
+    </form>
+</div>
+<include file="Public/footer" />

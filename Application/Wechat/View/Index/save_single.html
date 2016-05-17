@@ -1,0 +1,139 @@
+<include file="Public/header" />
+<div class="comm-top">
+    <h4 style="margin-bottom:0"><{:$item['id']?'修改':'添加'}>图文回复</h4>
+    <div class="add_page_top"></div>
+</div>
+<form id="memberform" onsubmit="return false;">
+    <input type="hidden" name="info[id]" value="<{$item.id}>" />
+    <input type="hidden" name="info[type]" value="2" />
+    <div class="sort_box">
+        <div class="sort">
+            <div class="sort_title"><h4>关键词：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="info[keyword]" value="<{$item.keyword}>" type="text" placeholder="多个规则用逗号分隔，如：help,帮助" />
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>标题：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="info[title]" value="<{$item.title}>" type="text" />
+            </div>
+        </div>
+        <div class="sort_box">
+            <input type="hidden" id="info_pic" name="info[pic]" value="<{$item.pic}>" />
+            <div class="sort">
+                <div class="sort_title"><h4>配图：</h4></div>
+                <div class="sort_set" style="position:relative;">
+                    <input class="sort_text" type="text" onclick="up_img_fun()" />
+                    <a href="javascript:void(0);" class="btn-upload" onclick="up_img_fun()">
+                        <i class="icons icons-upload"></i>上传
+                    </a>
+                    <span class="input_span_extra">&nbsp;&nbsp;&nbsp;建议图片尺寸540px*300px</span>
+                </div>
+            </div>
+            <div class="sort" <if condition="$vo['pic'] eq ''">style="display:none;"</if> >
+                <div class="sort_title"><h4>&nbsp;</h4></div>
+                <div class="sort_set" id="pic_wrapper">
+                    <img src="<{$vo.pic}>" />
+                </div>
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>跳转链接：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="info[url]" value="<{$item.url}>" type="text" />
+                <span class="input_span_extra">&nbsp;&nbsp;&nbsp;如：http://www.baidu.com</span>
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>内容：</h4></div>
+            <div class="sort_set">
+                <textarea id="content" name="info[content]" style="width:500px;height:150px;"><{$item.content}></textarea>
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>状态：</h4></div>
+            <div class="sort_set rdo">
+                <label class="lbl"><span><input type="radio" name="info[state]" <{:$item['state']!='2'?'checked': ''}> value='1'></span><span>开放</span></label>
+                <label class="lbl"><span><input type="radio" name="info[state]" <{:$item['state']=='2'?'checked': ''}> value='2'></span><span>关闭</span></label>
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title">
+                <h4>&nbsp;</h4>
+            </div>
+            <div class="sort_set">
+                <span onclick="save(this);return false" id="saveBtn" class="btngreen30">完成</span>
+                &nbsp;&nbsp;&nbsp;
+                <span onclick="history.go(-1);" class="btngray30">返回</span>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 上传图片开始 -->	
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/upimg/css/upimg.css" />
+<script type="text/javascript" src="__PUBLIC__/upimg/upimg.js"></script>
+<script type="text/javascript">
+/**
+ * up_img_fun(up_img_php) 执行上传的函数，微沟通图片上传的改版
+ * @param string up_img_php 后台处理图片上传的文件
+ * 
+ * up_img_notify(img_path) 上传回调函数
+ * @param string img_path 返回的图片地址，图片仍放在/data/image_c/下
+ */
+function up_img_notify(img_path){
+    $('#info_pic').val(img_path);
+    $('#pic_wrapper').parent().show();
+    $('#pic_wrapper img').attr('src',img_path);
+}
+</script>
+<!-- 上传图片结束 -->
+<script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.all.js"></script>
+<script type="text/javascript">
+$(function(){
+    //初始化编辑器
+    UE.getEditor('content', {
+        toolbars: [['source','bold','italic','underline','fontsize','forecolor','backcolor','pasteplain',
+        'insertorderedlist','cleardoc','link','simpleupload','emotion','map','inserttable',
+        //'insertimage',//多图上传
+        ]]
+    });
+});
+function save(obj){
+    if($("input[name='info[keyword]']").val()==''){
+        note_info('请填写关键词',obj,'warn');return;
+    }
+    if($("input[name='info[title]']").val()==''){
+        note_info('请填写标题',obj,'warn');return;
+    }
+    if($("input[name='info[pic]']").val()==''){
+        note_info('请上传图片',obj,'warn');return;
+    }
+    if(!isUrl($("input[name='info[url]']").val())){
+        note_info('请请填写正确的链接',obj,'warn');return;
+    }
+    if($("textarea[name='info[content]']").val()==''){
+        note_info('请填写内容',obj,'warn');return;
+    }
+    
+    $.post("<{:U('save_keyword')}>",$('#memberform').serialize(),function(res){
+        if(res.status == 1){
+            note_info(res.info,obj);
+            setTimeout('window.location.href="<{$upPageUrl}>"',1200);
+        }else{
+            note_info(res.info,obj,'warn');
+        }
+    },'json');
+}
+//判断URL
+function isUrl(str){
+    var RegUrl = new RegExp();
+    RegUrl.compile("^[A-Za-z]+://[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$");
+    if (!RegUrl.test(str)){
+        return false;
+    }
+    return true;
+}
+</script>
+<include file="Public/footer" />

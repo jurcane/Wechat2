@@ -1,0 +1,22 @@
+<include file="Public/header" />
+ <div class="comm-top">
+        <div class="title-left">
+            修改分类名
+        </div>
+        <div class="title-right">
+        </div>
+    </div>
+<form action="<{:U('article_sort_revise_ok')}>" method="post" >
+	<div style="width:100%;min-height:100px;border:none;padding:20px;">
+	<table>
+		<foreach name="list" item="vo">
+		<input type="hidden" name="sort_id" id="artisortid" value="<{$vo.id}>">
+		<input type="text" placeholder="请输入类名" name="tag_name" value="<{$vo.tag_name}>" />
+		</foreach>
+	</table>
+	</div>
+	<input type="submit" value="确认修改" />
+	<input type="reset" value="取消" />
+</form>
+
+<include file="Public/footer" />

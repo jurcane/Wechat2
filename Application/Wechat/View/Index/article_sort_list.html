@@ -1,0 +1,96 @@
+<include file="Public/header" />
+    <div class="comm-top">
+        <div class="title-left">
+            文章分类列表
+        </div>
+        <div class="title-right">
+        <form method="post" action="<{:U('article_sort_list')}>">
+            <input type="hidden" name="m" value="<{:MODULE_NAME}>" />
+            <input type="hidden" name="c" value="<{:CONTROLLER_NAME}>" />
+            <input type="hidden" name="a" value="<{:ACTION_NAME}>" />
+            <input name="keywords" class="textarea search_inp" placeholder="类名" type="text" value="<{:I('get.keywords')}>"/>
+            <input value="查找" class="btn btn-success search_btn" type="submit" />
+            <input value="+添加分类" class="btn btn-success search_btn" type="button" onclick="location.href='<{:U('article_sort_adds')}>'" />
+        </form>
+        </div>
+       
+    </div>
+    <div class="list-table">
+        <div class="wrapper">
+            <table class="stable">
+                <thead>
+                    <tr>
+                        <th>类名</th>
+                        <th>创建人</th>
+                        <th>发布时间</th>
+                        <th>修改时间</th>
+                        <th>文章数目</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form id="artisortlistForm">
+                    <foreach name="list" item="vo">
+                        <tr>
+                            <td><a href="<{:U('article_sortlist_cont?id='.$vo['id'])}>"><{$vo.tag_name}></a></td>
+                            <td><{$vo.author}></td>
+                            <td><{$vo.add_time|date="Y-m-d H:i",###}></td>
+                            <td><{$vo.modify_time|date="Y-m-d H:i",###}></td>
+                            <td><{$vo.article_num}></td>
+                            <td><a href="<{:U('article_sort_delete?id='.$vo['id'])}>" style="font-size:12px;">删除</a>|<a href="<{:U('article_sort_revise?id='.$vo['id'])}>" style="font-size:12px;">修改</a></td>
+                        </tr>
+                    </foreach>
+                    </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="page-list"><{$page}></div>
+<script type="text/javascript">
+$(function(){
+    //ajax获取用户分组
+    /*$.post('list.php',{a:'get_group'},function(res){
+        if(res){
+            var groupStr='';
+            $.each(res,function(i,n){
+                groupStr+="<option value='"+n.id+"'>"+n.name+"</option>";
+            });
+            $('.group_select').append(groupStr);
+        }
+    },'json');*/
+    //复选框全选全不选
+    $('#checkAll').click(function(){ 
+        $('input[name="openid[]"]').attr("checked",this.checked); 
+    });
+})
+//修改备注
+function edit_des(id,obj){
+    $.post('list.php',{id:id,a:'edit_des',des:$(obj).val()},function(res){
+        res=$.trim(res);
+        if(res=='suc'){
+            note_info('修改成功',obj);
+        }
+    });
+}
+//移动分组
+function changeGroup(obj){
+    if($('#changeSelect').val()===''){
+        note_info('请选择分组',obj,'warn');return;
+    }
+    if($("input[name='openid[]']:checked").length==0){
+        note_info('请勾选相应用户',obj,'warn');return;
+    }
+    var layerLoad=layer.load(1,{shade:[0.1,'#666']});
+    $.post('list.php?a=changeGroup&groupId='+$('#changeSelect').val(),$("#memberForm").serialize(),function(res){
+        layer.close(layerLoad);
+        res=$.trim(res);
+        if(res=='suc'){
+            note_info('移动分组成功',obj);
+            setTimeout("window.location.reload()",1200);
+        }else{
+            note_info('移动分组失败',obj,'warn');
+        }
+    });
+}
+</script>
+<include file="Public/footer" />

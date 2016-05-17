@@ -1,0 +1,88 @@
+<include file="Public/header" />
+<div class="comm-top">
+    <div class="title-left">
+        <h4 style="margin-bottom:0">添加微信公众号
+        </h4>
+    </div>
+    <div class="title-right">
+        <{$Think.session.user.username}>, <a href="<{:U('common/login_out')}>"><i class="glyphicon glyphicon-send"></i></a>
+    </div>
+</div>
+<form id="memberform" onsubmit="return false;">
+    <div class="sort_box">
+        <div class="sort">
+            <div class="sort_title"><h4>Name：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="name" value="" type="text" placeholder="" />
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>Token：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="token" value="" type="text" placeholder="" />
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>App ID：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="app_id" value="" type="text" placeholder="" />
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>App Secret：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="app_secret" value="" type="text" placeholder="" />
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>Aes Key：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="aes_key" value="" type="text" placeholder="" />
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title">
+                <h4>&nbsp;</h4>
+            </div>
+            <div class="sort_set">
+                <span onclick="saveform()" id="saveBtn" class="btngreen30">保存</span>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    function saveform() {
+        var data = {};
+        $('input').each(function() {
+            var _this = $(this);
+            data[_this.attr('name')] = _this.val();
+        })
+        for(k in data){
+            if (data[k] == "") {
+                return layer.alert(k + "is empty!");
+            }
+        }
+        $.ajax({
+            url:'<{:U('add_wechat_do')}>',
+            data:data,
+            type:'post',
+            dataType:'json',
+            success:function(resp) {
+                if (resp == null) {
+                    return layer.alert("Error");
+                }
+                if (resp.status != null && resp.status == 0) {
+                    layer.alert('添加成功');
+                    window.location.href = '<{:U('index/choose_w')}>';
+                    return;
+                } else {
+                    if (typeof resp.info == 'string') {
+                        return layer.alert(resp.info);
+                    }
+                }
+                layer.alert("Error");
+            }
+        });
+    }
+</script>
+<include file="Public/footer" />

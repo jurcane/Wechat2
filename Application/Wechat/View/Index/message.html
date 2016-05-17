@@ -1,0 +1,90 @@
+<include file="Public/header" />
+    <div class="comm-top">
+        <div class="title-left">
+            粉丝列表
+        </div>
+        <div class="title-right">
+        <form method="get" action="<{:U('member')}>">
+            <input type="hidden" name="m" value="<{:MODULE_NAME}>" />
+            <input type="hidden" name="c" value="<{:CONTROLLER_NAME}>" />
+            <input type="hidden" name="a" value="<{:ACTION_NAME}>" />
+            <input name="content" class="textarea search_inp" placeholder="Message Content" type="text" value="<{:I('get.keywords')}>"/>
+            <input value="查找" class="btn btn-success search_btn" type="submit" />
+        </form>
+        </div>
+    </div>
+    <div class="list-table">
+        <div class="wrapper">
+            <table class="stable">
+                <thead>
+                    <tr>
+                        <th>openID</th>
+                        <th>Type</th>
+                        <th>Content</th>
+                        <th>AddTime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form id="memberForm">
+                    <foreach name="list" item="vo">
+                        <tr>
+                            <td><{$vo.fromuser}></td>
+                            <td><{$vo.msgtype}></td>
+                            <td><{$vo.msg_content}></td>
+                            <td><{$vo.create_time|date="Y-m-d H:i a",###}></td>
+                        </tr>
+                    </foreach>
+                    </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="page-list"><{$page}></div>
+<script type="text/javascript">
+$(function(){
+    //ajax获取用户分组
+    /*$.post('list.php',{a:'get_group'},function(res){
+        if(res){
+            var groupStr='';
+            $.each(res,function(i,n){
+                groupStr+="<option value='"+n.id+"'>"+n.name+"</option>";
+            });
+            $('.group_select').append(groupStr);
+        }
+    },'json');*/
+    //复选框全选全不选
+    $('#checkAll').click(function(){ 
+        $('input[name="openid[]"]').attr("checked",this.checked); 
+    });
+})
+//修改备注
+function edit_des(id,obj){
+    $.post('list.php',{id:id,a:'edit_des',des:$(obj).val()},function(res){
+        res=$.trim(res);
+        if(res=='suc'){
+            note_info('修改成功',obj);
+        }
+    });
+}
+//移动分组
+function changeGroup(obj){
+    if($('#changeSelect').val()===''){
+        note_info('请选择分组',obj,'warn');return;
+    }
+    if($("input[name='openid[]']:checked").length==0){
+        note_info('请勾选相应用户',obj,'warn');return;
+    }
+    var layerLoad=layer.load(1,{shade:[0.1,'#666']});
+    $.post('list.php?a=changeGroup&groupId='+$('#changeSelect').val(),$("#memberForm").serialize(),function(res){
+        layer.close(layerLoad);
+        res=$.trim(res);
+        if(res=='suc'){
+            note_info('移动分组成功',obj);
+            setTimeout("window.location.reload()",1200);
+        }else{
+            note_info('移动分组失败',obj,'warn');
+        }
+    });
+}
+</script>
+<include file="Public/footer" />

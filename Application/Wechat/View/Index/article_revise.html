@@ -1,0 +1,65 @@
+<include file="Public/header" />
+ <div class="comm-top">
+        <div class="title-left">
+            修改文章
+        </div>
+        <div class="title-right">
+
+        </div>
+        
+    </div>
+
+<form action="<{:U('article_revise_ok')}>" method="post">
+	<div style="width:100%;min-height:400px;border:none;text-align:center;padding:20px;">
+	<table>
+
+	<foreach name="list" item="vo">
+		<h3><input type="text" value="<{$vo.title}>" name="title"  placeholder="文章标题" /></h3>
+		选择文章类别：
+			<input type="hidden" id="articleid" value="<{$vo.article_sort}>">
+			<input type="hidden" name="arti_id" id="articleid2" value="<{$vo.id}>">
+		<select name="article_sort" id="selectde">
+			<foreach name="sortlist" item="v">
+			<option value="<{$v.tag_name}>"><{$v.tag_name}></option>
+			</foreach>
+		</select>
+		&nbsp状态： 
+
+			<input type="hidden" id="article_status" value="<{$vo.status}>">
+					<select name="arti_status" id="select_status">
+						<option value="0" id="article_status0">隐藏</option>
+						<option value="1" id="article_status1">发布</option>
+					</select>
+		<br/>
+		<textarea style="resize:none;width:80%;min-height:400px;padding:10px;" placeholder="请输入内容"  value="<{$vo.content}>" name="content"><{$vo.content}></textarea>
+	</foreach>
+	</table>
+	</div>
+	<input type="submit" value="确认修改" />
+	<input type="reset" value="取消" />
+</form>
+<script type="text/javascript">
+function selectedid(){
+	var aid = $("#articleid").val();
+	$("#selectde option").each(function(){
+		if($(this).val() == aid){
+			$(this).attr("selected","selected");
+		}
+	});
+}
+function select_status(){
+	var staid = $("#article_status").val();
+	var staid0 = $("#article_status0").val();
+	var staid1 = $("#article_status1").val();
+	if(staid0==staid){
+	// $("#article_status1").removeAttribute("selected");
+	$("#article_status0").attr("selected","selected");
+	}else{
+	// $("#article_status0").removeAttribute("selected");
+	$("#article_status1").attr("selected","selected");
+	}
+}
+window.onload=selectedid();
+window.onload=select_status();
+</script>
+<include file="Public/footer" />

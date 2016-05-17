@@ -1,0 +1,109 @@
+<include file="Public/header" />
+    <div class="comm-top">
+        <div class="title-left">
+            文章列表
+        </div>
+        <div class="title-right">
+        <form method="post" action="<{:U('article_list')}>">
+            <input type="hidden" name="m" value="<{:MODULE_NAME}>" />
+            <input type="hidden" name="c" value="<{:CONTROLLER_NAME}>" />
+            <input type="hidden" name="a" value="<{:ACTION_NAME}>" />
+            <input name="keywords" class="textarea search_inp" placeholder="文章标题" type="text" value="<{:I('get.keywords')}>"/>
+            <input value="查找" class="btn btn-success search_btn" type="submit" />
+            <input value="+添加文章" class="btn btn-success search_btn" type="button" onclick="location.href='<{:U('article_adds')}>'" />
+        </form>
+        </div>
+        
+    </div>
+    <div class="list-table">
+        <div class="wrapper">
+            <table class="stable">
+                <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>编辑</th>
+                        <th>类别</th>
+                        <th>发布时间</th>
+                        <th>最后修改时间</th>
+                        <th>浏览次数</th>
+                        <th>点赞</th>
+                        <th>状态</th>
+                        <th>评论</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form id="artilistForm">
+                    <foreach name="list" item="vo">
+                        <tr>
+                            
+                            <td><{$vo.title}></td>
+                            <td><{$vo.author}></td>
+                            <td><{$vo.article_sort}></td>
+                            <td><{$vo.add_time|date="Y-m-d H:i",###}></td>
+                            <td><{$vo.modify_time|date="Y-m-d H:i",###}></td>
+                            <td><{$vo.view_num}></td>
+                            <td><{$vo.praise_num}></td>
+                            <td><{:$vo['status']==1?'已发布':'已隐藏'}></td>
+                            <td><a href="<{:U('article_discuss_list')}>" style="font-size:12px;"><{$vo.discuss_num}></a></td>
+                            <td><a href="<{:U('article_delete?id='.$vo['id'])}>" style="font-size:12px;">删除</a>|<a href="<{:U('article_revise?id='.$vo['id'])}>" style="font-size:12px;">修改</a></td>
+                        </tr>
+
+<!--                             <td><{:$vo['sex']=='2'?'女':'男'}></td>
+                            <td><{$vo.province}></td>
+                            <td><{$vo.city}></td> --> 
+                    </foreach>
+                    </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="page-list"><{$page}></div>
+<script type="text/javascript">
+$(function(){
+    //ajax获取用户分组
+    /*$.post('list.php',{a:'get_group'},function(res){
+        if(res){
+            var groupStr='';
+            $.each(res,function(i,n){
+                groupStr+="<option value='"+n.id+"'>"+n.name+"</option>";
+            });
+            $('.group_select').append(groupStr);
+        }
+    },'json');*/
+    //复选框全选全不选
+    $('#checkAll').click(function(){ 
+        $('input[name="openid[]"]').attr("checked",this.checked); 
+    });
+})
+//修改备注
+function edit_des(id,obj){
+    $.post('list.php',{id:id,a:'edit_des',des:$(obj).val()},function(res){
+        res=$.trim(res);
+        if(res=='suc'){
+            note_info('修改成功',obj);
+        }
+    });
+}
+//移动分组
+function changeGroup(obj){
+    if($('#changeSelect').val()===''){
+        note_info('请选择分组',obj,'warn');return;
+    }
+    if($("input[name='openid[]']:checked").length==0){
+        note_info('请勾选相应用户',obj,'warn');return;
+    }
+    var layerLoad=layer.load(1,{shade:[0.1,'#666']});
+    $.post('list.php?a=changeGroup&groupId='+$('#changeSelect').val(),$("#memberForm").serialize(),function(res){
+        layer.close(layerLoad);
+        res=$.trim(res);
+        if(res=='suc'){
+            note_info('移动分组成功',obj);
+            setTimeout("window.location.reload()",1200);
+        }else{
+            note_info('移动分组失败',obj,'warn');
+        }
+    });
+}
+</script>
+<include file="Public/footer" />

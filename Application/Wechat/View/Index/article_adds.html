@@ -1,0 +1,36 @@
+<include file="Public/header" />
+ <div class="comm-top">
+        <div class="title-left">
+            添加新文章
+        </div>
+        <div class="title-right">
+
+        </div>
+        
+    </div>
+<form action="<{:U('article_adds_ok')}>" method="post" >
+	<div style="width:100%;min-height:400px;border:none;text-align:center;padding:20px;">
+	<table>
+		<h3><input type="text" name="title" placeholder="文章标题" /></h3>
+		选择文章类别：
+		<select name="article_sort" id="selectde">
+			<foreach name="sortlist" item="v">
+			<option value="<{$v.tag_name}>"><{$v.tag_name}></option>
+			</foreach>
+		</select>
+		&nbsp选择状态： 
+
+			<input type="hidden" id="article_status" value="<{$vo.status}>">
+					<select name="arti_status" id="select_status">
+						<option value="0" id="article_status0">隐藏</option>
+						<option value="1" id="article_status1" selected="selected">发布</option>
+					</select>
+		<br/>
+		<textarea name="content" style="resize:none;width:80%;min-height:400px;padding:10px;" placeholder="请输入内容"></textarea>
+	</table>
+	</div>
+	<input type="submit" value="确认添加" />
+	<input type="reset" value="取消" />
+</form>
+
+<include file="Public/footer" />

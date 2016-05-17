@@ -1,0 +1,103 @@
+<include file="Public/header"/>
+<style type="text/css">
+    .stateLabel{height:35px;line-height:35px;float:left;display:inline-block;margin:0;cursor:pointer;}
+    #reply_content_div,#reply_keyword_div{display:none;}
+</style>
+<div class="comm-top">
+    <if condition="$_GET['type'] eq '1'">
+    <h4 style="margin-bottom:0">首次关注回复
+        <span style="font-size:12px;color:#aaa;font-weight:normal;">（用户首次关注成功后收到的界面欢迎信息。可以写一些提醒用户的相关操作等。首次回复可以是以文字或图文的形式出现）</span>
+    </h4>
+    <else />
+    <h4 style="margin-bottom:0">无匹配回复
+        <span style="font-size:12px;color:#aaa;font-weight:normal;">（用户发送关键字/关键词后，并无匹配结果后的返回信息。可以写一些提醒用户的相关操作等）</span>
+    </h4>
+    </if>
+    <div class="add_page_top"></div>
+</div>
+<div class="sort_box">
+    <form role="form" method="post" id="autoreplyform">
+        <input type="hidden" name="info[id]" value="<{$item.id}>">
+        <input type="hidden" name="info[type]" value="<{:I('get.type')}>">
+        <if condition="$_GET['type'] eq '1'">
+        <div class="sort">
+            <div class="sort_title"><h4>回复类型：</h4></div>
+            <div class="sort_set">
+                <select class="sort_text" id="is_content" name="info[is_content]">
+                    <option value="1" <{:$item['is_content']!='2'?'selected': ''}>>文本消息</option>
+                    <option value="2" <{:$item['is_content']=='2'?'selected': ''}>>绑定关键词</option>
+                </select>
+            </div>
+        </div>
+        </if>
+        <div id="reply_content_div" class="sort" <if condition="$item['is_content'] neq '2'">style="display:block;"</if> >
+             <div class="sort_title"><h4>回复内容：</h4></div>
+            <div class="sort_set">
+                <textarea id="reply_content" class="sort_text" style="width:400px;height:150px;" name="info[content]"><{$item.content}></textarea>
+            </div>
+        </div>
+        <div id="reply_keyword_div" class="sort" <if condition="$item['is_content'] eq '2'">style="display:block;"</if> >
+             <div class="sort_title"><h4>规则：</h4></div>
+            <div class="sort_set">
+                <input id="reply_keyword" name="info[keyword]" type="text" class="sort_text" value="<{$item.keyword}>" />
+                <span class="input_span_extra">&nbsp;&nbsp;请先在关键词回复设置好规则内容</span>
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>状态：</h4></div>
+            <div class="sort_set">
+                <label class="stateLabel">
+                    <input type="radio" class="stateLabel" style="line-height:35px;margin:0;" value="1" name="info[state]" <{:$item['state']!='2'?'checked': ''}> />
+                           <span class="stateLabel">开启</span>
+                </label>
+                <label class="stateLabel" style="margin-left:20px;">
+                    <input type="radio" class="stateLabel" style="line-height:35px;margin:0;" value="2" name="info[state]" <{:$item['state']=='2'?'checked': ''}> />
+                           <span class="stateLabel">关闭</span>
+                </label>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="sort">
+            <div class="sort_title">
+                <h4>&nbsp;</h4>
+            </div>
+            <div class="sort_set">
+                <span onclick="saveform(this)" id="saveBtn" class="btngreen30">提交保存</span>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function saveform(obj) {
+        if ($("#reply_content").val() == '' && $("#reply_keyword").val() == '') {
+            note_info('请填写回复内容或规则', obj, 'warn');
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "<{:U('save_auto_reply')}>",
+            data: $('#autoreplyform').serialize(),
+            success: function(res){
+                if(res.status == 1){
+                    note_info(res.info,obj);
+                    setTimeout('location.reload()',1000);
+                }else{
+                    note_info(res.info,obj,'warn');
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#is_content').change(function () {
+            if ($(this).val() == '1') {
+                $('#reply_keyword_div').hide();
+                $('#reply_content_div').show();
+            } else {
+                $('#reply_content_div').hide();
+                $('#reply_keyword_div').show();
+            }
+        });
+    });
+</script>
+<include file="Public/footer"/>

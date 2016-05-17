@@ -1,0 +1,82 @@
+<include file="Public/header" />
+<style type="text/css">
+    .title-left a{color:#888;}
+    .title-left .active{color:#009997;}
+</style>
+    <div class="comm-top">
+        <div class="title-left">
+		<a href="<{:U('index_keyword',array('type'=>'1'))}>" class="<{:I('get.type')=='1'?'active':''}>">文字</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+		<a href="<{:U('index_keyword',array('type'=>'2'))}>" class="<{:I('get.type')=='2'?'active':''}>">图文</a>
+	</div>
+    <div class="title-right" style="top:8px;">
+    <form method="get" action="<{:U('index_keyword')}>">
+        <input type="hidden" name="m" value="<{:MODULE_NAME}>" />
+        <input type="hidden" name="c" value="<{:CONTROLLER_NAME}>" />
+        <input type="hidden" name="a" value="<{:ACTION_NAME}>" />
+        <input type="hidden" name="type" value="<{:I('get.type')}>" />
+        <input name="keywords" class="textarea search_inp" placeholder="请输入关键词" type="text" value="<{:I('get.keywords')}>"/>
+        <input value="搜索" class="btn btn-success search_btn" type="submit" />
+        <input value="添加<{:I('get.type')=='1'?'文字':'图文'}>回复" class="btn btn-success search_btn" type="button" onclick="location.href='<{:U('save_keyword',array('type'=>I('get.type')))}>'" />
+    </form>
+    </div>
+    </div>
+    <div class="list-table">
+        <div class="wrapper">
+            <table class="stable">
+                <thead>
+                    <tr>
+                        <th>关键词</th>
+                        <if condition="$_GET['type'] eq '1'">
+                            <th>内容</th>
+                        <else />
+                            <th>图片</th>
+                            <th>标题</th>
+                        </if>
+                        <th>推送量</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <foreach name="list" item="vo">
+                        <tr>
+                            <td><{$vo.keyword}></td>
+                            <if condition="$_GET['type'] eq '1'">
+                                <td style="white-space:normal;max-width:600px;"><{$vo.content}></td>
+                            <else />
+                                <td><img src="<{$vo.pic}>" style="height:50px;width:auto;"></td>
+                                <td style="white-space:normal;max-width:250px;"><{$vo.title}></td>
+                            </if>
+                            <td><{$vo.push_num}></td>
+                            <if condition="$vo['state'] eq 1">
+                                <td style="color:#009997;font-weight:bold;">开放中</td>
+                            <else />
+                                <td style="color:#aaa">已关闭</td>
+                            </if>
+                            <td><div class="btn-operate">
+                                <a href="<{:U('save_keyword',array('id'=>$vo['id'],'type'=>I('get.type')))}>" title="修改"><i class="glyphicon glyphicon-edit"></i></a>
+                                <a href="javascript:void(0);" onclick="delRow('<{$vo.id}>',this)" title="删除" id="delBtn<{$vo.id}>"><i class="glyphicon glyphicon-trash"></i></a>
+                            </div></td>
+                        </tr>
+                    </foreach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="page-list"><{$page}></div>
+<script type="text/javascript">
+function delRow(id,obj){
+    if(confirm('确定要删除吗？')){
+        $.get("<{:U('commonDel')}>",{id:id},function(res){
+            if(res.status == 1){
+                note_info(res.info,obj);
+                setTimeout('location.reload()',1200);
+            }else{
+                note_info(res.info,obj,'warn');
+            }
+        },'json');
+    }
+}
+</script>
+<include file="Public/footer" />

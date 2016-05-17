@@ -1,0 +1,21 @@
+<include file="Public/header" />
+ <div class="comm-top">
+        <div class="title-left">
+            添加新分类
+        </div>
+        <div class="title-right">
+
+        </div>
+        
+    </div>
+<form action="<{:U('article_sort_adds_ok')}>" method="post" >
+	<div style="width:100%;min-height:100px;border:none;padding:20px;">
+	<table>
+		<input type="text" placeholder="请输入类名" name="tag_name" />
+	</table>
+	</div>
+	<input type="submit" value="确认添加" />
+	<input type="reset" value="取消" />
+</form>
+
+<include file="Public/footer" />

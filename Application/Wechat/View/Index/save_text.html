@@ -1,0 +1,60 @@
+<include file="Public/header" />
+<div class="comm-top">
+    <h4 style="margin-bottom:0"><{:$item['id']?'修改':'添加'}>文字回复</h4>
+    <div class="add_page_top"></div>
+</div>
+<form id="memberform" onsubmit="return false;">
+    <input type="hidden" name="info[id]" value="<{$item.id}>" />
+    <input type="hidden" name="info[type]" value="1" />
+    <div class="sort_box">
+        <div class="sort">
+            <div class="sort_title"><h4>关键词：</h4></div>
+            <div class="sort_set">
+                <input class="sort_text" name="info[keyword]" value="<{$item.keyword}>" type="text" placeholder="多个规则用逗号分隔，如：help,帮助" />
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>回复内容：</h4></div>
+            <div class="sort_set">
+                <textarea name="info[content]" maxlength="300" style="height:150px;" class="sort_text" placeholder="最多可以输入300字"><{$item.content}></textarea>
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title"><h4>状态：</h4></div>
+            <div class="sort_set rdo">
+                <label class="lbl"><span><input type="radio" name="info[state]" <{:$item['state']!='2'?'checked': ''}> value='1'></span><span>开放</span></label>
+                <label class="lbl"><span><input type="radio" name="info[state]" <{:$item['state']=='2'?'checked': ''}> value='2'></span><span>关闭</span></label>
+            </div>
+        </div>
+        <div class="sort">
+            <div class="sort_title">
+                <h4>&nbsp;</h4>
+            </div>
+            <div class="sort_set">
+                <span onclick="save(this);return false" id="saveBtn" class="btngreen30">完成</span>
+                &nbsp;&nbsp;&nbsp;
+                <span onclick="history.go(-1);" class="btngray30">返回</span>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+function save(obj){
+    if($("input[name='info[keyword]']").val()==''){
+        note_info('请填写关键词',obj,'warn');return;
+    }
+    if($("textarea[name='info[content]']").val()==''){
+        note_info('请填写回复内容',obj,'warn');return;
+    }
+    
+    $.post("<{:U('save_keyword')}>",$('#memberform').serialize(),function(res){
+        if(res.status == 1){
+            note_info(res.info,obj);
+            setTimeout('window.location.href="<{$upPageUrl}>"',1200);
+        }else{
+            note_info(res.info,obj,'warn');
+        }
+    },'json');
+}
+</script>
+<include file="Public/footer" />

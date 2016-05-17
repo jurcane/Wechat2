@@ -1,0 +1,86 @@
+* {
+    font-family: "Microsoft YaHei", "黑体", "宋体";
+}
+.menu{font-size:15px;}
+.main-menu .menu ul{font-size: 14px;}
+.main-menu .menu ul li{padding:10px 0 10px 55px;}
+.main-menu .menu ul li.cur.omega{background-position: 0 -191px;}
+.main-menu .menu ul li{background-position: 0 -65px;}
+.user-info{padding-top:10px;}
+.user-info li{margin-right: 0;font-size:14px;line-height: 30px;}
+/*.main-menu .menu ul li.cur{background-position: 0 -130px;}*/
+
+.login_time{
+    display: block;border:none;color:#fff;
+}
+.main-content{padding-left: 0 !important;}
+.main-menu .menu ul li.cur{background-position:0 -131px;}
+.main-menu .menu ul li.cur a{text-decoration: none;}
+.main-menu .menu li a{text-decoration: none;}
+
+.main-header h1{width: 20%}
+.main-header .title{width: 80%}
+.main-header .pull-left i{margin-top:8px;}
+.main-header .pull-right{width:160px;height:50px}
+
+/*列表页开始*/
+*{
+    -moz-user-select:none;-webkit-user-select:none;
+}
+.uppic {
+    background: url('./file/updown.jpg') no-repeat scroll center center transparent;
+    height: 30px;
+    width: 80px;
+    position: absolute;
+    left: 68px;
+    top: 0;
+    cursor: pointer;
+}
+
+.uppic_file {
+    cursor: pointer;
+    display: block;
+    height: 28px;
+    opacity: 0;
+    position: absolute;
+    width: 80px;
+}
+
+.duanh {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+tr:hover{background: #FAF7F7;}
+td a:hover{color:#47a447 !important;}
+
+.even_bg{background: #F5F5F5;}
+
+.mall-set-title  li a{display: block;}
+.comm-list .page-list a,.comm-list .page-list span{margin:0 5px;}
+.comm-list .page-list a:hover{background:#47a447;color:#fff;}
+
+.page-list{margin:30px 0;}
+.slct{width:130px;vertical-align: middle;margin-top:-5px;padding:2px 12px;}
+.btn_u{
+    margin-top:-4px;
+}
+.border_bottom{border-bottom:1px dashed #DBDBDB;margin:5px 10px;}
+.upload_notice{float:left;line-height:34px;margin-left:5px;}
+.text_hei1{height: 150px !important;}
+/*列表页结束*/
+/*设置元素宽度*/
+.w_auto{width:auto !important;}
+.w_10{width:10% !important;}
+.w_20{width:20% !important;}
+.w_30{width:30% !important;}
+.w_40{width:40% !important;}
+.w_50{width:50% !important;}
+.w_60{width:60% !important;}
+.w_70{width:70% !important;}
+.w_80{width:80% !important;}
+.w_90{width:90% !important;}
+.w_100{width:100% !important;}
+/*设置文字颜色*/
+.c_red{color:#E88C81;}
+.c_green{color:#53B000;}
